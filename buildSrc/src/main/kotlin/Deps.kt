@@ -12,6 +12,7 @@ object BuildPluginsVersions {
     }
 
     const val DEPENDENCY_UPDATES = "0.42.0"
+    const val MAPS_SECRETS = "2.0.1"
 }
 
 object Deps {
@@ -25,15 +26,19 @@ object Deps {
             private const val version = "1.6.4"
             const val CORE = "org.jetbrains.kotlinx:kotlinx-coroutines-core:$version"
             const val ANDROID = "org.jetbrains.kotlinx:kotlinx-coroutines-android:$version"
+            const val PLAY_SERVICES = "org.jetbrains.kotlinx:kotlinx-coroutines-play-services:$version"
         }
     }
 
     object Di {
-        private const val koin_version = "3.2.2"
-        const val CORE = "io.insert-koin:koin-core:$koin_version"
-        const val CORE_TEST = "io.insert-koin:koin-test:$koin_version"
-        const val ANDROIDX = "io.insert-koin:koin-android:$koin_version"
-        const val ANDROIDX_NAV = "io.insert-koin:koin-androidx-navigation:$koin_version"
+        private const val koinVersion= "3.3.2"
+        private const val koinAndroidVersion = "3.3.2"
+        private const val koinComposeVersion = "3.4.1"
+        const val CORE = "io.insert-koin:koin-core:$koinVersion"
+        const val CORE_TEST = "io.insert-koin:koin-test:$koinVersion"
+        const val ANDROIDX = "io.insert-koin:koin-android:$koinAndroidVersion"
+        const val ANDROIDX_NAV = "io.insert-koin:koin-androidx-navigation:$koinAndroidVersion"
+        const val COMPOSE = "io.insert-koin:koin-androidx-compose:$koinComposeVersion"
     }
 
     object IO {
@@ -86,6 +91,7 @@ object Deps {
             const val MATERIAL_3 = "androidx.compose.material3:material3:1.1.0-alpha04"
             const val MATERIAL = "androidx.compose.material:material:1.3.1"
             const val MATERIAL_ICONS_EXTENDED = "androidx.compose.material:material-icons-extended:$version"
+            const val MAPS = "com.google.maps.android:maps-compose:2.11.4"
 
             object Accompanist {
                 private const val version = "0.31.0-alpha"
@@ -99,6 +105,12 @@ object Deps {
                 const val MANIFEST = "androidx.compose.ui:ui-test-manifest:$version"
             }
         }
+
+        object PlayServices {
+            const val MAPS = "com.google.android.gms:play-services-maps:18.1.0"
+            const val LOCATION = "com.google.android.gms:play-services-location:21.0.1"
+        }
+
         object Navigation {
             const val VERSION = "2.5.3"
             const val FRAGMENT = "androidx.navigation:navigation-fragment-ktx:$VERSION"
@@ -114,9 +126,10 @@ object Deps {
         }
 
         object Mvi {
-            private const val version = "4.4.0"
+            private const val version = "4.6.1"
             const val CORE = "org.orbit-mvi:orbit-core:$version"
             const val VIEWMODEL = "org.orbit-mvi:orbit-viewmodel:$version"
+            const val COMPOSE = "org.orbit-mvi:orbit-compose:$version"
 
             const val TEST = "org.orbit-mvi:orbit-test:$version"
         }

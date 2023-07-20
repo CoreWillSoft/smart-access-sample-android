@@ -18,16 +18,13 @@ plugins {
     id("io.gitlab.arturbosch.detekt") version BuildPluginsVersions.DETEKT
     id("org.jlleitschuh.gradle.ktlint") version BuildPluginsVersions.KTLINT.PLUGIN
     id("com.github.ben-manes.versions") version BuildPluginsVersions.DEPENDENCY_UPDATES
+    id("com.google.android.libraries.mapsplatform.secrets-gradle-plugin") version BuildPluginsVersions.MAPS_SECRETS apply false
 }
 
 /* Shared Infrastructure */
 
 allprojects {
     group = PUBLISHING_GROUP
-    repositories {
-        google()
-        mavenCentral()
-    }
 }
 
 subprojects {

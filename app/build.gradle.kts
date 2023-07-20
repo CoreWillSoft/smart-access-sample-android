@@ -5,7 +5,7 @@ plugins {
     id("kotlin-android")
     id("kotlin-parcelize")
     id("kotlinx-serialization")
-    id("androidx.navigation.safeargs.kotlin")
+    id("com.google.android.libraries.mapsplatform.secrets-gradle-plugin")
 }
 
 android {
@@ -109,10 +109,12 @@ dependencies {
     implementation(Deps.Core.Coroutine.CORE)
     implementation(Deps.Core.Coroutine.ANDROID)
     implementation(Deps.Core.KOTLIN_RESULT)
+    implementation(Deps.Core.Coroutine.PLAY_SERVICES)
 
     // DI
     implementation(Deps.Di.ANDROIDX)
     implementation(Deps.Di.ANDROIDX_NAV)
+    implementation(Deps.Di.COMPOSE)
 
     // Presentation
     implementation(Deps.Presentation.Core.ANDROIDX_CORE_KTX)
@@ -125,13 +127,16 @@ dependencies {
     implementation(Deps.Presentation.Navigation.KTX)
     implementation(Deps.Presentation.Mvi.CORE)
     implementation(Deps.Presentation.Mvi.VIEWMODEL)
+    implementation(Deps.Presentation.Mvi.COMPOSE)
     implementation(Deps.Presentation.Compose.ACTIVITY)
     implementation(Deps.Presentation.Compose.UI)
     implementation(Deps.Presentation.Compose.TOOLING_PREVIEW)
     implementation(Deps.Presentation.Compose.MATERIAL_3)
     implementation(Deps.Presentation.Compose.MATERIAL)
     implementation(Deps.Presentation.Compose.MATERIAL_ICONS_EXTENDED)
+    implementation(Deps.Presentation.Compose.MAPS)
     implementation(Deps.Presentation.Compose.Accompanist.SYSTEM_UI_CONTROLLER)
+    implementation(Deps.Presentation.Compose.Accompanist.PERMISSIONS)
     // Widget
     implementation(Deps.Presentation.Widget.ANDROIDX_CONSTRAINT_LAYOUT)
     //
@@ -151,6 +156,8 @@ dependencies {
 
     // Util
     implementation(Deps.Util.TIMBER)
+    implementation(Deps.Presentation.PlayServices.MAPS)
+    implementation(Deps.Presentation.PlayServices.LOCATION)
 
     // Unit Testing
     testImplementation(Deps.Testing.Kotest.RUNNER)

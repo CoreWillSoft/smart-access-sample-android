@@ -3,6 +3,7 @@ package io.sample.smartaccess.app.common.di
 import io.sample.smartaccess.app.BuildConfig
 import io.sample.smartaccess.app.TemplateApp
 import io.sample.smartaccess.app.common.boot.LoggerInitializer
+import io.sample.smartaccess.app.feature.map.geofenceUiModule
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
 import org.koin.core.context.startKoin
@@ -21,6 +22,7 @@ internal fun TemplateApp.diDeclaration(): KoinAppDeclaration = {
         /*region Root Modules*/
         startupModule,
         coroutinesModule,
+        geofenceUiModule,
         /*endregion*/
         /*region IO*/
         securityModule,
