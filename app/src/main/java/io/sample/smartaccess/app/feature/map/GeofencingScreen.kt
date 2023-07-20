@@ -27,6 +27,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.location.Priority.PRIORITY_HIGH_ACCURACY
@@ -43,6 +44,7 @@ import com.google.maps.android.compose.MapUiSettings
 import com.google.maps.android.compose.MarkerInfoWindowContent
 import com.google.maps.android.compose.rememberCameraPositionState
 import com.google.maps.android.compose.rememberMarkerState
+import io.sample.smartaccess.app.R
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
@@ -61,6 +63,7 @@ internal fun GeofencingScreen() {
         position = defaultCameraPosition
     }
 
+    GeofenceEffectCollector(viewModel)
     Box(Modifier.fillMaxSize()) {
         GoogleMapView(
             modifier = Modifier.matchParentSize(),
@@ -164,7 +167,7 @@ private fun GoogleMapView(
         onRegister = viewModel::onRegister,
         onDeregister = viewModel::onDeregister,
         radius = state.radiusText,
-        radiusInputVisible = state.radiusInputVisible
+        radiusInputEnabled = state.radiusInputEnabled
     )
 }
 
@@ -174,15 +177,20 @@ private fun MapTopComponent(
     registerEnabled: Boolean,
     deRegisterEnabled: Boolean,
     radius: String,
-    radiusInputVisible: Boolean,
+    radiusInputEnabled: Boolean,
     onRegister: () -> Unit = {},
     onDeregister: () -> Unit = {},
     onRadiusChange: (String) -> Unit = {}
 ) {
     Column(modifier = modifier) {
-        if (radiusInputVisible) {
-            TextField(value = radius, onValueChange = onRadiusChange)
-        }
+        TextField(
+            value = radius,
+            onValueChange = onRadiusChange,
+            enabled = radiusInputEnabled,
+            modifier = Modifier.fillMaxWidth(),
+            label = {
+                Text(text = stringResource(R.string.radius_in_meters_text))
+            })
         Row(
             modifier = modifier
                 .fillMaxWidth()

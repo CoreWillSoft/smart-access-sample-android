@@ -4,6 +4,8 @@ import io.sample.smartaccess.app.BuildConfig
 import io.sample.smartaccess.app.TemplateApp
 import io.sample.smartaccess.app.common.boot.LoggerInitializer
 import io.sample.smartaccess.app.feature.map.geofenceUiModule
+import io.sample.smartaccess.data.geofenceDataModule
+import io.sample.smartaccess.domain.geofenceDomainModule
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
 import org.koin.core.context.startKoin
@@ -23,6 +25,8 @@ internal fun TemplateApp.diDeclaration(): KoinAppDeclaration = {
         startupModule,
         coroutinesModule,
         geofenceUiModule,
+        geofenceDataModule,
+        geofenceDomainModule,
         /*endregion*/
         /*region IO*/
         securityModule,

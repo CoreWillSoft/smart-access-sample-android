@@ -46,7 +46,9 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="${MAPS_API_KEY}" />
 
-        <activity android:name="io.sample.smartaccess.app.core.RootActivity" android:exported="true">
+        <activity android:name="io.sample.smartaccess.app.core.RootActivity"
+            android:exported="true"
+            android:launchMode="singleTask">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -57,6 +59,15 @@
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />
 
+        <receiver
+            android:name="io.sample.smartaccess.data.GeofenceBroadcastReceiver"
+            android:enabled="true"
+            android:exported="false"/>
+        <service
+            android:name="io.sample.smartaccess.data.AdvertisementService"
+            android:enabled="true"
+            android:exported="false"
+           />
     </application>
 
 </manifest>
