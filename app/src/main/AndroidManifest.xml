@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="io.template.app">
+    package="io.sample.smartaccess.app">
 
     <application
         android:name=".TemplateApp"
@@ -13,7 +13,7 @@
         android:theme="@style/Theme.App"
         tools:ignore="GoogleAppIndexingWarning, allowBackup">
 
-        <activity android:name="io.template.app.core.RootActivity" android:exported="true">
+        <activity android:name="io.sample.smartaccess.app.core.RootActivity" android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />

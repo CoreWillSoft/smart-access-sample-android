@@ -1,7 +1,7 @@
 object BuildPluginsVersions {
 
-    const val AGP = "7.2.1"
-    const val KOTLIN = "1.7.20"
+    const val AGP = "7.4.1"
+    const val KOTLIN = "1.9.0"
 
     const val DOKKA = "1.7.20"
     const val DETEKT = "1.19.0"
@@ -76,6 +76,29 @@ object Deps {
             const val TESTING = "androidx.fragment:fragment-testing:$version"
         }
 
+        object Compose {
+            private const val version = "1.4.3"
+            const val COMPILER = "1.5.0"
+
+            const val ACTIVITY = "androidx.activity:activity-compose:1.6.1"
+            const val UI = "androidx.compose.ui:ui:$version"
+            const val TOOLING_PREVIEW = "androidx.compose.ui:ui-tooling-preview:$version"
+            const val MATERIAL_3 = "androidx.compose.material3:material3:1.1.0-alpha04"
+            const val MATERIAL = "androidx.compose.material:material:1.3.1"
+            const val MATERIAL_ICONS_EXTENDED = "androidx.compose.material:material-icons-extended:$version"
+
+            object Accompanist {
+                private const val version = "0.31.0-alpha"
+                const val SYSTEM_UI_CONTROLLER = "com.google.accompanist:accompanist-systemuicontroller:$version"
+                const val PERMISSIONS = "com.google.accompanist:accompanist-permissions:$version"
+            }
+
+            object Testing {
+                const val UI_JUNIT = "androidx.compose.ui:ui-test-junit4:$version"
+                const val TOOLING = "androidx.compose.ui:ui-tooling:$version"
+                const val MANIFEST = "androidx.compose.ui:ui-test-manifest:$version"
+            }
+        }
         object Navigation {
             const val VERSION = "2.5.3"
             const val FRAGMENT = "androidx.navigation:navigation-fragment-ktx:$VERSION"

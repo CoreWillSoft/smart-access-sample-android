@@ -1,6 +1,6 @@
 package com.io.template.library
 
-import io.template.library.FactorialCalculator.computeFactorial
+import io.sample.library.FactorialCalculator.computeFactorial
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertThrows
 import org.junit.Test

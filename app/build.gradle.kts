@@ -31,9 +31,6 @@ android {
     kotlinOptions {
         jvmTarget = "1.8"
     }
-    buildFeatures {
-        viewBinding = true
-    }
     testOptions {
         animationsDisabled = true
         unitTests.apply {
@@ -90,7 +87,11 @@ android {
         }
     }
     buildFeatures {
-        viewBinding = true
+        compose = true
+    }
+
+    composeOptions {
+        kotlinCompilerExtensionVersion = Deps.Presentation.Compose.COMPILER
     }
     lint {
         warningsAsErrors = true
@@ -121,11 +122,16 @@ dependencies {
     implementation(Deps.Presentation.Lifecycle.COMMON)
     implementation(Deps.Presentation.Lifecycle.PROCESS)
     implementation(Deps.Presentation.Fragment.KTX)
-    implementation(Deps.Presentation.Navigation.FRAGMENT)
     implementation(Deps.Presentation.Navigation.KTX)
-    implementation(Deps.Presentation.Navigation.DYNAMIC_FEATURES)
     implementation(Deps.Presentation.Mvi.CORE)
     implementation(Deps.Presentation.Mvi.VIEWMODEL)
+    implementation(Deps.Presentation.Compose.ACTIVITY)
+    implementation(Deps.Presentation.Compose.UI)
+    implementation(Deps.Presentation.Compose.TOOLING_PREVIEW)
+    implementation(Deps.Presentation.Compose.MATERIAL_3)
+    implementation(Deps.Presentation.Compose.MATERIAL)
+    implementation(Deps.Presentation.Compose.MATERIAL_ICONS_EXTENDED)
+    implementation(Deps.Presentation.Compose.Accompanist.SYSTEM_UI_CONTROLLER)
     // Widget
     implementation(Deps.Presentation.Widget.ANDROIDX_CONSTRAINT_LAYOUT)
     //

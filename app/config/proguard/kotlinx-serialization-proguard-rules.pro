@@ -22,10 +22,10 @@
 
 -keepattributes *Annotation*, InnerClasses
 -dontnote kotlinx.serialization.SerializationKt
--keep,includedescriptorclasses class io.template.data.**$$serializer { *; } # <-- change package name to your app's
--keepclassmembers class io.template.data** { # <-- change package name to your app's
+-keep,includedescriptorclasses class io.sample.data.**$$serializer { *; } # <-- change package name to your app's
+-keepclassmembers class io.sample.data** { # <-- change package name to your app's
     *** Companion;
 }
--keepclasseswithmembers class io.template.data** { # <-- change package name to your app's
+-keepclasseswithmembers class io.sample.data** { # <-- change package name to your app's
     kotlinx.serialization.KSerializer serializer(...);
 }
