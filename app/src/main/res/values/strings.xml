@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Kotlin Android Template</string>
+
+    <!--region Main-->
+    <string name="main_title">This is just a template</string>
+    <string name="main_description">You can compute a factorial using the library-kotlin module. The result will be also shown in a notification using the library-android module.</string>
+    <string name="main_factorial_hint">Insert a number to compute his factorial</string>
+    <string name="main_compute">Compute</string>
+    <!--endregion-->
+
+    <!--region Notification-->
+    <string name="notification_title">The Result is:</string>
+    <!--endregion-->
+
+    <!--region Dashboard-->
+    <string name="dashboard_title">Dashboard</string>
+    <!--endregion-->
+
+    <!--region Login-->
+    <string name="lgoin_title">Sign In</string>
+    <string name="login_disclaimer">Hello, let\'s login</string>
+    <string name="login_username_hint">E-mail</string>
+    <string name="login_password_hint">Password</string>
+    <string name="login_username_invalid_hint">Type in valid email</string>
+    <string name="login_password_invalid_hint">Provide password with 8 symb. min</string>
+    <string name="login_action">Sign In</string>
+    <string name="login_go_register">I don\'t have account</string>
+    <!--endregion-->
+
+    <!--region Registration-->
+    <string name="registration_title">Sign Up</string>
+    <string name="registration_disclaimer">I\'m Registration</string>
+    <!--endregion-->
+
+    <!--region Common-->
+    <!--<string name="common_error">Something went wrong</string>-->
+    <!--endregion-->
+
+</resources>

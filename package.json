@@ -1,0 +1,9 @@
+{
+  "private": true,
+  "scripts": {
+    "postinstall": "npm install husky"
+  },
+  "dependencies": {
+    "husky": "^6.0.0"
+  }
+}
