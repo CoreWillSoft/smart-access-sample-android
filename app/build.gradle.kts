@@ -100,8 +100,6 @@ android {
 }
 
 dependencies {
-    implementation(project(":library-android"))
-    implementation(project(":library-kotlin"))
 
     // Core
     coreLibraryDesugaring(Deps.Core.DESUGARING)
@@ -149,10 +147,6 @@ dependencies {
 
     // IO
     implementation(Deps.IO.KotlinxSerialization.JSON)
-    implementation(Deps.IO.OkHttp.CORE)
-    implementation(Deps.IO.OkHttp.MOCK)
-    implementation(Deps.IO.Retrofit.CORE)
-    implementation(Deps.IO.Retrofit.KOTLINX_SERIALIZATION_CONVERTER)
 
     // Util
     implementation(Deps.Util.TIMBER)

@@ -16,7 +16,5 @@ dependencyResolutionManagement {
 rootProject.name = ("smart-access-sample-android")
 
 include(
-    "app",
-    "library-android",
-    "library-kotlin"
+    "app"
 )
