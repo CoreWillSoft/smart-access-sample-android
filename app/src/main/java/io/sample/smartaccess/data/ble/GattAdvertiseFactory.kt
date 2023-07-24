@@ -1,24 +1,24 @@
-package io.sample.smartaccess.data.advertising
+package io.sample.smartaccess.data.ble
 
 import android.bluetooth.le.AdvertiseData
 import android.bluetooth.le.AdvertiseSettings
 
-interface AdvertiseFactory {
+interface GattAdvertiseFactory {
 
-    fun makeSettings(): AdvertiseSettings
+    fun settings(): AdvertiseSettings
 
-    fun makeData(): AdvertiseData
+    fun data(): AdvertiseData
 }
 
-internal class AdvertiseFactoryImpl : AdvertiseFactory {
+internal class GattAdvertiseFactoryImpl : GattAdvertiseFactory {
 
-    override fun makeSettings(): AdvertiseSettings = AdvertiseSettings.Builder()
+    override fun settings(): AdvertiseSettings = AdvertiseSettings.Builder()
         .setAdvertiseMode(AdvertiseSettings.ADVERTISE_MODE_LOW_LATENCY)
         .setConnectable(true)
         .setTxPowerLevel(AdvertiseSettings.ADVERTISE_TX_POWER_HIGH)
         .build()
 
-    override fun makeData(): AdvertiseData = AdvertiseData.Builder()
+    override fun data(): AdvertiseData = AdvertiseData.Builder()
         .setIncludeDeviceName(true)
         .addManufacturerData(0x004C, byteArrayOf())
 //            .addServiceUuid(ParcelUuid(SERVICE_UUID))

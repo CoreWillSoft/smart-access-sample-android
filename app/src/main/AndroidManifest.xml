@@ -60,11 +60,11 @@
             android:resource="@array/preloaded_fonts" />
 
         <receiver
-            android:name="io.sample.smartaccess.data.GeofenceBroadcastReceiver"
+            android:name="io.sample.smartaccess.data.geofense.GeofenceBroadcastReceiver"
             android:enabled="true"
             android:exported="false"/>
         <service
-            android:name="io.sample.smartaccess.data.AdvertisementService"
+            android:name="io.sample.smartaccess.data.ble.GattService"
             android:enabled="true"
             android:exported="false"
            />

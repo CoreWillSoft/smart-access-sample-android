@@ -139,6 +139,8 @@ object Deps {
 
     object Util {
         const val TIMBER = "com.jakewharton.timber:timber:5.0.1"
+        const val NORDIC_SEMI_BLE = "no.nordicsemi.android:ble:2.6.1"
+        const val NORDIC_SEMI_BLE_KTX = "no.nordicsemi.android:ble-ktx:2.6.1"
     }
 
     object Testing {

@@ -1,4 +1,4 @@
-package io.sample.smartaccess.data
+package io.sample.smartaccess.data.geofense
 
 import android.annotation.SuppressLint
 import android.app.NotificationChannel
@@ -18,6 +18,7 @@ import com.google.android.gms.location.Geofence.GEOFENCE_TRANSITION_EXIT
 import com.google.android.gms.location.GeofencingEvent
 import io.sample.smartaccess.app.R
 import io.sample.smartaccess.app.core.RootActivity
+import io.sample.smartaccess.data.ble.GattService
 import io.sample.smartaccess.domain.GeofenceTransitionChannel
 import io.sample.smartaccess.domain.GeofenceTransitionSession
 import org.koin.core.context.GlobalContext
@@ -45,7 +46,7 @@ class GeofenceBroadcastReceiver : BroadcastReceiver() {
         val channel = GlobalContext.get().get<GeofenceTransitionChannel>()
         channel.tryEmit(GeofenceTransitionSession.Enter)
         showNotification(context, event)
-        val serviceIntent = Intent(context, AdvertisementService::class.java)
+        val serviceIntent = Intent(context, GattService::class.java)
         serviceIntent.putExtra("inputExtra", context.getString(R.string.service_advertising_text))
         ContextCompat.startForegroundService(context, serviceIntent)
     }
@@ -53,7 +54,7 @@ class GeofenceBroadcastReceiver : BroadcastReceiver() {
     private fun handleExit(context: Context) {
         val channel = GlobalContext.get().get<GeofenceTransitionChannel>()
         channel.tryEmit(GeofenceTransitionSession.Exit)
-        val serviceIntent = Intent(context, AdvertisementService::class.java)
+        val serviceIntent = Intent(context, GattService::class.java)
         context.stopService(serviceIntent)
         with(NotificationManagerCompat.from(context)) {
             cancel(NOTIFICATION_BROADCAST_ID)

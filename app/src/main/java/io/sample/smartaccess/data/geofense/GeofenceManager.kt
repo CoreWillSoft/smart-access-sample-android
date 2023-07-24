@@ -1,4 +1,4 @@
-package io.sample.smartaccess.data
+package io.sample.smartaccess.data.geofense
 
 import android.annotation.SuppressLint
 import android.app.PendingIntent

@@ -3,12 +3,10 @@ package io.sample.smartaccess.app.feature.map
 import android.os.Parcelable
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
-import io.sample.smartaccess.data.GeofenceManager
+import io.sample.smartaccess.data.geofense.GeofenceManager
 import com.google.android.gms.maps.model.LatLng
 import io.sample.smartaccess.domain.GeofenceTransitionChannel
 import io.sample.smartaccess.domain.GeofenceTransitionSession
-import kotlinx.coroutines.flow.count
-import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.filterIsInstance
 import kotlinx.parcelize.Parcelize
 import org.orbitmvi.orbit.Container
@@ -108,7 +106,7 @@ internal data class State(
     val position: LatLng = LatLng(0.0, 0.0),
     val zoom: Float = 16f,
     val radius: Double = 200.0,
-    val radiusText: String = "200"
+    val radiusText: String = radius.toInt().toString()
 ) : Parcelable
 
 internal sealed class Effect {

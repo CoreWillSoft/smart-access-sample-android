@@ -8,5 +8,8 @@
     <string name="service_notification_title">SmartAccess Foreground Service</string>
     <string name="service_advertising_text">SmartAccess BLE advertising running</string>
     <string name="service_advertising_channel_name">SmartAccess Advertisement Service Channel"</string>
+    <string name="gatt_service_name">BLE Gatt Service</string>
+    <string name="gatt_service_description">A background BLE GATT service</string>
+    <string name="gatt_service_running_notification">Advertising BLE GATT service</string>
 
 </resources>

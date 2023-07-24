@@ -9,8 +9,8 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.core.app.NotificationManagerCompat
 import io.sample.smartaccess.app.R
-import io.sample.smartaccess.data.AdvertisementService
-import io.sample.smartaccess.data.NOTIFICATION_BROADCAST_ID
+import io.sample.smartaccess.data.ble.GattService
+import io.sample.smartaccess.data.geofense.NOTIFICATION_BROADCAST_ID
 import org.orbitmvi.orbit.compose.collectSideEffect
 
 @OptIn(ExperimentalComposeUiApi::class)
@@ -31,7 +31,7 @@ internal fun GeofenceEffectCollector(
 }
 
 private fun stopServiceAndNotification(context: Context) {
-    val serviceIntent = Intent(context, AdvertisementService::class.java)
+    val serviceIntent = Intent(context, GattService::class.java)
     context.stopService(serviceIntent)
     NotificationManagerCompat.from(context).cancel(NOTIFICATION_BROADCAST_ID)
 }

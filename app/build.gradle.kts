@@ -150,6 +150,8 @@ dependencies {
 
     // Util
     implementation(Deps.Util.TIMBER)
+    implementation(Deps.Util.NORDIC_SEMI_BLE)
+    implementation(Deps.Util.NORDIC_SEMI_BLE_KTX)
     implementation(Deps.Presentation.PlayServices.MAPS)
     implementation(Deps.Presentation.PlayServices.LOCATION)
 
