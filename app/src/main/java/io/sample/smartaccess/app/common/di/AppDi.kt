@@ -1,7 +1,7 @@
 package io.sample.smartaccess.app.common.di
 
 import io.sample.smartaccess.app.BuildConfig
-import io.sample.smartaccess.app.TemplateApp
+import io.sample.smartaccess.app.SmartAccessApp
 import io.sample.smartaccess.app.common.boot.LoggerInitializer
 import io.sample.smartaccess.app.feature.map.geofenceUiModule
 import io.sample.smartaccess.data.ble.bleDataModule
@@ -14,11 +14,11 @@ import org.koin.core.logger.Level
 import org.koin.dsl.KoinAppDeclaration
 import org.koin.dsl.module
 
-fun TemplateApp.attachDi() {
+fun SmartAccessApp.attachDi() {
     startKoin(appDeclaration = diDeclaration())
 }
 
-internal fun TemplateApp.diDeclaration(): KoinAppDeclaration = {
+internal fun SmartAccessApp.diDeclaration(): KoinAppDeclaration = {
     androidLogger(if (BuildConfig.DEBUG) Level.ERROR else Level.NONE)
     androidContext(this@diDeclaration)
     modules(
@@ -28,15 +28,7 @@ internal fun TemplateApp.diDeclaration(): KoinAppDeclaration = {
         geofenceUiModule,
         geofenceDataModule,
         geofenceDomainModule,
-        bleDataModule,
-        /*endregion*/
-        /*region IO*/
-        securityModule,
-        serializerModule,
-        /*endregion*/
-        /*region Core Domain*/
-
-        /*endregion*/
+        bleDataModule
     )
 }
 

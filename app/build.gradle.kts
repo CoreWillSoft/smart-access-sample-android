@@ -4,7 +4,6 @@ plugins {
     id("com.android.application")
     id("kotlin-android")
     id("kotlin-parcelize")
-    id("kotlinx-serialization")
     id("com.google.android.libraries.mapsplatform.secrets-gradle-plugin")
 }
 
@@ -121,8 +120,6 @@ dependencies {
     implementation(Deps.Presentation.Lifecycle.VIEWMODEL)
     implementation(Deps.Presentation.Lifecycle.COMMON)
     implementation(Deps.Presentation.Lifecycle.PROCESS)
-    implementation(Deps.Presentation.Fragment.KTX)
-    implementation(Deps.Presentation.Navigation.KTX)
     implementation(Deps.Presentation.Mvi.CORE)
     implementation(Deps.Presentation.Mvi.VIEWMODEL)
     implementation(Deps.Presentation.Mvi.COMPOSE)
@@ -135,18 +132,6 @@ dependencies {
     implementation(Deps.Presentation.Compose.MAPS)
     implementation(Deps.Presentation.Compose.Accompanist.SYSTEM_UI_CONTROLLER)
     implementation(Deps.Presentation.Compose.Accompanist.PERMISSIONS)
-    // Widget
-    implementation(Deps.Presentation.Widget.ANDROIDX_CONSTRAINT_LAYOUT)
-    //
-    implementation(Deps.Presentation.Util.Corbind.PLATFORM)
-    implementation(Deps.Presentation.Util.Corbind.CORE)
-    implementation(Deps.Presentation.Util.Corbind.MATERIAL)
-
-    // Security
-    implementation(Deps.Security.CRYPTO)
-
-    // IO
-    implementation(Deps.IO.KotlinxSerialization.JSON)
 
     // Util
     implementation(Deps.Util.TIMBER)
@@ -181,13 +166,6 @@ dependencies {
     androidTestImplementation(Deps.Testing.Androidx.ESPRESSO_CORE)
     androidTestImplementation(Deps.Testing.UI.KAKAO)
     androidTestImplementation(Deps.Testing.UI.BARISTA) { exclude(group = "org.jetbrains.kotlin") }
-    androidTestImplementation(Deps.Testing.UI.TestButler.LIBRARY)
-    // androidTestUtil(Deps.Testing.UI.TestButler.APP) // wont work on non-aosp API >= 27
-    debugImplementation(Deps.Presentation.Fragment.TESTING) {
-        exclude(group = "androidx.test", module = "core")
-    }
-    testReleaseImplementation(Deps.Presentation.Fragment.TESTING)
-        ?.because("used by both AndroidJunitRunner and Robolectric, and Robolectric participates in testReleaseUnitTest")
     debugImplementation(Deps.Testing.Androidx.TEST_MONITOR)
         ?.because("https://github.com/android/android-test/issues/731")
     androidTestImplementation(Deps.Presentation.Navigation.TESTING)

@@ -41,12 +41,6 @@ object Deps {
         const val COMPOSE = "io.insert-koin:koin-androidx-compose:$koinComposeVersion"
     }
 
-    object IO {
-        object KotlinxSerialization {
-            const val JSON = "org.jetbrains.kotlinx:kotlinx-serialization-json:1.4.1"
-        }
-    }
-
     object Presentation {
 
         object Core {
@@ -61,12 +55,6 @@ object Deps {
             const val COMMON = "androidx.lifecycle:lifecycle-common-java8:$lifecycle_version"
             const val PROCESS = "androidx.lifecycle:lifecycle-process:$lifecycle_version"
 
-        }
-
-        object Fragment {
-            private const val version = "1.4.1"
-            const val KTX = "androidx.fragment:fragment-ktx:$version"
-            const val TESTING = "androidx.fragment:fragment-testing:$version"
         }
 
         object Compose {
@@ -108,11 +96,6 @@ object Deps {
             const val TESTING = "androidx.navigation:navigation-testing:$VERSION"
         }
 
-        object Widget {
-            const val ANDROIDX_CONSTRAINT_LAYOUT =
-                "androidx.constraintlayout:constraintlayout:2.1.4"
-        }
-
         object Mvi {
             private const val version = "4.6.1"
             const val CORE = "org.orbit-mvi:orbit-core:$version"
@@ -121,20 +104,6 @@ object Deps {
 
             const val TEST = "org.orbit-mvi:orbit-test:$version"
         }
-
-        object Util {
-            object Corbind {
-                private const val version = "1.5.5"
-                const val PLATFORM = "ru.ldralighieri.corbind:corbind:$version"
-                const val MATERIAL = "ru.ldralighieri.corbind:corbind-material:$version"
-                const val CORE = "ru.ldralighieri.corbind:corbind-core:$version"
-            }
-        }
-    }
-
-    object Security {
-        private const val version_ktx = "1.1.0-alpha03"
-        const val CRYPTO = "androidx.security:security-crypto-ktx:$version_ktx"
     }
 
     object Util {

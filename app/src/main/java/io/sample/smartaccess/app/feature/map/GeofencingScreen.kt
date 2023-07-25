@@ -5,25 +5,15 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.EnterTransition
 import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.wrapContentSize
-import androidx.compose.material.Button
-import androidx.compose.material.CircularProgressIndicator
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
-import androidx.compose.material.TextField
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.Add
+import androidx.compose.material.icons.outlined.Delete
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
@@ -34,16 +24,7 @@ import com.google.android.gms.location.Priority.PRIORITY_HIGH_ACCURACY
 import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.tasks.CancellationTokenSource
-import com.google.maps.android.compose.CameraPositionState
-import com.google.maps.android.compose.Circle
-import com.google.maps.android.compose.DragState
-import com.google.maps.android.compose.GoogleMap
-import com.google.maps.android.compose.MapProperties
-import com.google.maps.android.compose.MapType
-import com.google.maps.android.compose.MapUiSettings
-import com.google.maps.android.compose.MarkerInfoWindowContent
-import com.google.maps.android.compose.rememberCameraPositionState
-import com.google.maps.android.compose.rememberMarkerState
+import com.google.maps.android.compose.*
 import io.sample.smartaccess.app.R
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -62,11 +43,13 @@ internal fun GeofencingScreen() {
     val cameraPositionState = rememberCameraPositionState {
         position = defaultCameraPosition
     }
-
     GeofenceEffectCollector(viewModel)
-    Box(Modifier.fillMaxSize()) {
+    Box(
+        Modifier.fillMaxSize()
+    ) {
         GoogleMapView(
             modifier = Modifier.matchParentSize(),
+            modifierBottomSheet = Modifier.align(Alignment.BottomCenter),
             cameraPositionState = cameraPositionState,
             onMapLoaded = viewModel::onMapLoaded,
             viewModel = viewModel
@@ -81,7 +64,7 @@ internal fun GeofencingScreen() {
             ) {
                 CircularProgressIndicator(
                     modifier = Modifier
-                        .background(MaterialTheme.colors.background)
+                        .background(MaterialTheme.colorScheme.background)
                         .wrapContentSize()
                 )
             }
@@ -93,6 +76,7 @@ internal fun GeofencingScreen() {
 @Composable
 private fun GoogleMapView(
     modifier: Modifier = Modifier,
+    modifierBottomSheet: Modifier = Modifier,
     viewModel: GeofenceViewModel,
     cameraPositionState: CameraPositionState = rememberCameraPositionState(),
     onMapLoaded: () -> Unit = {},
@@ -104,8 +88,16 @@ private fun GoogleMapView(
     val context = LocalContext.current
     val locationClient = remember { LocationServices.getFusedLocationProviderClient(context) }
 
-    val uiSettings by remember { mutableStateOf(MapUiSettings(compassEnabled = false)) }
-    val mapProperties by remember { mutableStateOf(MapProperties(mapType = MapType.NORMAL)) }
+    val uiSettings by remember {
+        mutableStateOf(
+            MapUiSettings(
+                compassEnabled = false,
+                mapToolbarEnabled = false,
+                zoomControlsEnabled = false
+            )
+        )
+    }
+    val mapProperties by remember { mutableStateOf(MapProperties(mapType = MapType.NORMAL, isMyLocationEnabled = true)) }
 
     LaunchedEffect(Unit) {
         scope.launch(Dispatchers.IO) {
@@ -137,7 +129,7 @@ private fun GoogleMapView(
     }
 
     GoogleMap(
-        modifier = modifier,
+        modifier = modifier.padding(bottom = if (state.bottomBarState is State.BottomBarState.ManagePoint) 60.dp else 100.dp),
         cameraPositionState = cameraPositionState,
         properties = mapProperties,
         uiSettings = uiSettings,
@@ -149,68 +141,103 @@ private fun GoogleMapView(
             state = markerState,
             draggable = true,
         ) {
-            Text(it.title ?: "Geofence", color = Color.Red)
+            Text(it.title ?: stringResource(R.string.marker_text, state.radiusText), color = Color.Black)
         }
         Circle(
             center = state.position,
-            fillColor = MaterialTheme.colors.secondary.copy(alpha = 0.2f),
-            strokeColor = MaterialTheme.colors.secondaryVariant,
+            fillColor = Color(0xFF54FFD3).copy(alpha = 0.2f),
+            strokeColor = Color.Black,
             strokeWidth = 3.0f,
             radius = state.radius,
         )
         content()
     }
-    MapTopComponent(
-        registerEnabled = state.registerEnabled,
-        deRegisterEnabled = state.deregisterEnabled,
-        onRadiusChange = viewModel::onRadiusChange,
-        onRegister = viewModel::onRegister,
-        onDeregister = viewModel::onDeregister,
-        radius = state.radiusText,
-        radiusInputEnabled = state.radiusInputEnabled
-    )
+    if (state.bottomBarState is State.BottomBarState.ManagePoint)
+        MapManagePointComponent(
+            modifier = modifierBottomSheet,
+            onAddClick = viewModel::onAddClick,
+            onDeleteClick = viewModel::onDeleteClick
+        )
+    else
+        MapRegisterPointComponent(
+            onRadiusChange = viewModel::onRadiusChange,
+            onRegister = viewModel::onSaveClick,
+            radius = state.radiusText,
+            modifier = modifierBottomSheet
+        )
 }
 
 @Composable
-private fun MapTopComponent(
+private fun MapManagePointComponent(
     modifier: Modifier = Modifier,
-    registerEnabled: Boolean,
-    deRegisterEnabled: Boolean,
+    onAddClick: () -> Unit,
+    onDeleteClick: () -> Unit
+) {
+    Box(
+        modifier = modifier
+            .background(
+                color = Color(0xFFF7F7F6),
+                shape = RoundedCornerShape(topStart = 5.dp, topEnd = 5.dp)
+            )
+            .height(68.dp)
+            .fillMaxWidth(),
+    ) {
+        Icon(
+            imageVector = Icons.Outlined.Delete,
+            contentDescription = null,
+            tint = Color.Red,
+            modifier = Modifier
+                .align(Alignment.CenterStart)
+                .padding(start = 20.dp)
+                .clickable { onDeleteClick() }
+        )
+        Icon(
+            imageVector = Icons.Outlined.Add,
+            contentDescription = null,
+            tint = MaterialTheme.colorScheme.primary,
+            modifier = Modifier
+                .align(Alignment.CenterEnd)
+                .padding(end = 20.dp)
+                .clickable { onAddClick() }
+        )
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun MapRegisterPointComponent(
+    modifier: Modifier = Modifier,
     radius: String,
-    radiusInputEnabled: Boolean,
     onRegister: () -> Unit = {},
-    onDeregister: () -> Unit = {},
     onRadiusChange: (String) -> Unit = {}
 ) {
-    Column(modifier = modifier) {
+    Column(
+        modifier = modifier
+            .fillMaxWidth()
+            .background(color = Color(0xFFF7F7F6), shape = RoundedCornerShape(topStart = 5.dp, topEnd = 5.dp))
+    ) {
         TextField(
             value = radius,
             onValueChange = onRadiusChange,
-            enabled = radiusInputEnabled,
             modifier = Modifier.fillMaxWidth(),
             label = {
                 Text(text = stringResource(R.string.radius_in_meters_text))
-            })
-        Row(
-            modifier = modifier
+            },
+            colors = TextFieldDefaults.textFieldColors(
+                containerColor = Color.Transparent,
+                cursorColor = MaterialTheme.colorScheme.primary,
+                focusedIndicatorColor = Color.Transparent,
+                unfocusedIndicatorColor = Color.Transparent,
+                focusedLabelColor = MaterialTheme.colorScheme.primary,
+            )
+        )
+        Button(
+            onClick = onRegister,
+            modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 12.dp),
-            horizontalArrangement = Arrangement.spacedBy(16.dp)
+                .padding(horizontal = 20.dp)
         ) {
-            Button(
-                onClick = onRegister,
-                enabled = registerEnabled,
-                modifier = Modifier.weight(1f)
-            ) {
-                Text(text = "Register area")
-            }
-            Button(
-                onClick = onDeregister,
-                enabled = deRegisterEnabled,
-                modifier = Modifier.weight(1f)
-            ) {
-                Text(text = "Deregister area")
-            }
+            Text(text = stringResource(R.string.save))
         }
     }
 

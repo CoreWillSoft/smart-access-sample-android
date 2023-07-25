@@ -22,6 +22,8 @@ import io.sample.smartaccess.app.R
 import io.sample.smartaccess.app.core.RootActivity
 import org.koin.core.context.GlobalContext
 
+private const val GROUP_KEY_ADVERTISING = "service.group"
+
 class GattService : Service() {
 
     private var serverManager: GattServerManager? = null
@@ -106,7 +108,7 @@ class GattService : Service() {
             .setAutoCancel(true)
             .setContentIntent(createServicePendingIntent())
             .setForegroundServiceBehavior(NotificationCompat.FOREGROUND_SERVICE_IMMEDIATE)
-
+            .setGroup(GROUP_KEY_ADVERTISING)
         startForeground(1, notification.build())
     }
 

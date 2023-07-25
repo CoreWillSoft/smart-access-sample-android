@@ -24,6 +24,7 @@ import io.sample.smartaccess.domain.GeofenceTransitionSession
 import org.koin.core.context.GlobalContext
 
 private const val CHANNEL_ID = "12643"
+private const val GROUP_KEY_GEOFENCE = "geofence.group"
 internal const val NOTIFICATION_BROADCAST_ID = 7549
 
 class GeofenceBroadcastReceiver : BroadcastReceiver() {
@@ -75,6 +76,7 @@ class GeofenceBroadcastReceiver : BroadcastReceiver() {
             .setContentText("Geofences triggered : ${mapTransition(geofencingEvent)}")
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)
             .setContentIntent(createGeofencingPendingIntent(context))
+            .setGroup(GROUP_KEY_GEOFENCE)
         with(NotificationManagerCompat.from(context)) {
             // notificationId is a unique int for each notification that you must define
             notify(NOTIFICATION_BROADCAST_ID, builder.build())
@@ -82,12 +84,9 @@ class GeofenceBroadcastReceiver : BroadcastReceiver() {
     }
 
     private fun createNotificationChannel(context: Context) {
-        val name = "SmartAccess Channel"
-        val descriptionText = "SmartAccess Channel Test description"
-        val channel = NotificationChannel(CHANNEL_ID, name, IMPORTANCE_DEFAULT).apply {
-            description = descriptionText
-        }
-        // Register the channel with the system
+        val name = context.getString(R.string.notification_channel_geofence)
+        val descriptionText = context.getString(R.string.notification_channel_geofence_description)
+        val channel = NotificationChannel(CHANNEL_ID, name, IMPORTANCE_DEFAULT).apply { description = descriptionText }
         val notificationManager: NotificationManager =
             context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         notificationManager.createNotificationChannel(channel)

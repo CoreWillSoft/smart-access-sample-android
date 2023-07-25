@@ -5,12 +5,11 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import io.sample.smartaccess.data.geofense.GeofenceManager
 import com.google.android.gms.maps.model.LatLng
-import io.sample.smartaccess.domain.GeofenceTransitionChannel
-import io.sample.smartaccess.domain.GeofenceTransitionSession
-import kotlinx.coroutines.flow.filterIsInstance
 import kotlinx.parcelize.Parcelize
 import org.orbitmvi.orbit.Container
 import org.orbitmvi.orbit.ContainerHost
+import org.orbitmvi.orbit.annotation.OrbitExperimental
+import org.orbitmvi.orbit.syntax.simple.blockingIntent
 import org.orbitmvi.orbit.syntax.simple.intent
 import org.orbitmvi.orbit.syntax.simple.postSideEffect
 import org.orbitmvi.orbit.syntax.simple.reduce
@@ -21,8 +20,7 @@ private const val MIN_RADIUS = 50
 
 internal class GeofenceViewModel(
     savedStateHandle: SavedStateHandle,
-    private val geofenceManager: GeofenceManager,
-    private val geofenceTransitionChannel: GeofenceTransitionChannel
+    private val geofenceManager: GeofenceManager
 ) :
     ViewModel(), ContainerHost<State, Effect> {
 
@@ -30,17 +28,7 @@ internal class GeofenceViewModel(
         initialState = State(),
         savedStateHandle = savedStateHandle
     ) {
-        observeGeofenceTransition()
-    }
 
-    private fun observeGeofenceTransition() = intent {
-        geofenceTransitionChannel.filterIsInstance<GeofenceTransitionSession.Exit>().collect {
-            reduce { state.copy(
-                registerEnabled = true,
-                deregisterEnabled = false,
-                radiusInputEnabled = true
-            ) }
-        }
     }
 
     fun onMapLoaded() = intent {
@@ -59,39 +47,36 @@ internal class GeofenceViewModel(
         reduce { state.copy(currentLocationLoaded = true) }
     }
 
-    fun onRegister() = intent {
+    fun onSaveClick() = intent {
         runCatching { state.radiusText.toDouble() }
             .onSuccess { radius ->
                 if (radius < MIN_RADIUS) postSideEffect(Effect.ShowRadiusMinimum)
                 else {
+                    geofenceManager.deregisterGeofence()
                     geofenceManager.registerGeofence(GEOFENCE_KEY, state.position, radius.toFloat())
-                    reduce {
-                        state.copy(
-                            radius = radius,
-                            registerEnabled = false,
-                            deregisterEnabled = true,
-                            radiusInputEnabled = false
-                        )
-                    }
+                    reduce { state.copy(radius = radius, bottomBarState = State.BottomBarState.ManagePoint) }
                 }
             }
             .onFailure { postSideEffect(Effect.ShowRadiusInvalid) }
         postSideEffect(Effect.HideKeyboard)
     }
 
-    fun onDeregister() = intent {
+    fun onDeleteClick() = intent {
         geofenceManager.deregisterGeofence()
         postSideEffect(Effect.DeregisterGeofence)
+        reduce { state.copy(bottomBarState = State.BottomBarState.AddPoint) }
+    }
+
+    fun onAddClick() = intent {
         reduce {
             state.copy(
-                registerEnabled = true,
-                deregisterEnabled = false,
-                radiusInputEnabled = true
+                bottomBarState = State.BottomBarState.AddPoint
             )
         }
     }
 
-    fun onRadiusChange(radius: String) = intent {
+    @OptIn(OrbitExperimental::class)
+    fun onRadiusChange(radius: String) = blockingIntent {
         reduce { state.copy(radiusText = radius) }
     }
 }
@@ -100,14 +85,19 @@ internal class GeofenceViewModel(
 internal data class State(
     val mapLoaded: Boolean = false,
     val currentLocationLoaded: Boolean = false,
-    val registerEnabled: Boolean = true,
-    val deregisterEnabled: Boolean = false,
-    val radiusInputEnabled: Boolean = true,
+    val bottomBarState: BottomBarState = BottomBarState.AddPoint,
     val position: LatLng = LatLng(0.0, 0.0),
     val zoom: Float = 16f,
     val radius: Double = 200.0,
     val radiusText: String = radius.toInt().toString()
-) : Parcelable
+) : Parcelable {
+
+    @Parcelize
+    sealed class BottomBarState : Parcelable {
+        object AddPoint : BottomBarState()
+        object ManagePoint : BottomBarState()
+    }
+}
 
 internal sealed class Effect {
     object ShowRadiusInvalid : Effect()

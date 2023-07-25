@@ -3,7 +3,7 @@
     <string name="app_name">SmartAccess</string>
     <string name="radius_invalid_error_text">Invalid radius</string>
     <string name="radius_invalid_error_min_text">Minimum radius must be 50m</string>
-    <string name="radius_in_meters_text">Radius in meters</string>
+    <string name="radius_in_meters_text">Radius (m)</string>
     <string name="radius_text">Radius</string>
     <string name="service_notification_title">SmartAccess Foreground Service</string>
     <string name="service_advertising_text">SmartAccess BLE advertising running</string>
@@ -11,5 +11,9 @@
     <string name="gatt_service_name">BLE Gatt Service</string>
     <string name="gatt_service_description">A background BLE GATT service</string>
     <string name="gatt_service_running_notification">Advertising BLE GATT service</string>
+    <string name="save">Save</string>
+    <string name="marker_text">Radius %1s(m)</string>
+    <string name="notification_channel_geofence">SmartAccess Geofence Channel</string>
+    <string name="notification_channel_geofence_description">SmartAccess Channel description</string>
 
 </resources>
