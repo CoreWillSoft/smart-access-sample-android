@@ -52,7 +52,14 @@ internal fun GeofencingScreen() {
             modifierBottomSheet = Modifier.align(Alignment.BottomCenter),
             cameraPositionState = cameraPositionState,
             onMapLoaded = viewModel::onMapLoaded,
-            viewModel = viewModel
+            state = state,
+            onPositionChange = viewModel::onPositionChange,
+            onRadiusChange = viewModel::onRadiusChange,
+            onLocationLoaded = viewModel::onLocationLoaded,
+            onZoomChange = viewModel::onZoomChange,
+            onAddClick = viewModel::onAddClick,
+            onDeleteClick = viewModel::onDeleteClick,
+            onSaveClick = viewModel::onSaveClick
         )
         if (!state.mapLoaded && !state.currentLocationLoaded) {
             AnimatedVisibility(
@@ -77,12 +84,18 @@ internal fun GeofencingScreen() {
 private fun GoogleMapView(
     modifier: Modifier = Modifier,
     modifierBottomSheet: Modifier = Modifier,
-    viewModel: GeofenceViewModel,
+    state: State,
     cameraPositionState: CameraPositionState = rememberCameraPositionState(),
-    onMapLoaded: () -> Unit = {},
+    onMapLoaded: () -> Unit,
+    onPositionChange: (LatLng) -> Unit,
+    onRadiusChange: (String) -> Unit = {},
+    onLocationLoaded: () -> Unit,
+    onZoomChange: (Float) -> Unit,
+    onAddClick: () -> Unit,
+    onDeleteClick: () -> Unit,
+    onSaveClick: () -> Unit,
     content: @Composable () -> Unit = {}
 ) {
-    val state by viewModel.collectAsState()
     val markerState = rememberMarkerState(position = state.position)
     val scope = rememberCoroutineScope()
     val context = LocalContext.current
@@ -111,8 +124,8 @@ private fun GoogleMapView(
                     markerState.position = position
                     cameraPositionState.position =
                         CameraPosition.fromLatLngZoom(markerState.position, state.zoom)
-                    viewModel.onPositionChange(position = position)
-                    viewModel.onLocationLoaded()
+                    onPositionChange(position)
+                    onLocationLoaded()
                 }
             }
         }
@@ -122,10 +135,10 @@ private fun GoogleMapView(
         cameraPositionState.position =
             CameraPosition.fromLatLngZoom(markerState.position, state.zoom)
         markerState.hideInfoWindow()
-        viewModel.onPositionChange(position = markerState.position)
+        onPositionChange(markerState.position)
     }
     LaunchedEffect(cameraPositionState.position.zoom) {
-        viewModel.onZoomChange(cameraPositionState.position.zoom)
+        onZoomChange(cameraPositionState.position.zoom)
     }
 
     GoogleMap(
@@ -155,13 +168,13 @@ private fun GoogleMapView(
     if (state.bottomBarState is State.BottomBarState.ManagePoint)
         MapManagePointComponent(
             modifier = modifierBottomSheet,
-            onAddClick = viewModel::onAddClick,
-            onDeleteClick = viewModel::onDeleteClick
+            onAddClick = onAddClick,
+            onDeleteClick = onDeleteClick
         )
     else
         MapRegisterPointComponent(
-            onRadiusChange = viewModel::onRadiusChange,
-            onRegister = viewModel::onSaveClick,
+            onRadiusChange = onRadiusChange,
+            onRegister = onSaveClick,
             radius = state.radiusText,
             modifier = modifierBottomSheet
         )
