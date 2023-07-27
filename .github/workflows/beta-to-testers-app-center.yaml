@@ -17,17 +17,13 @@ jobs:
         uses: actions/setup-java@v1
         with:
           java-version: 11
-      - name: Update Maps Key from Secrets
-        env:
-          MAPS_API_KEY: ${{ secrets.MAPS_API_KEY }}
-        run: echo MAPS_API_KEY="MAPS_API_KEY" > ./local.properties
       - name: build debug
         run: ./gradlew assembleDebug
       - name: Prepare release notes
         id: release-notes
         env:
           ACTIONS_ALLOW_UNSECURE_COMMANDS: true
-        run: echo 'RELEASE_NOTES='$(git log --format=%B -n 20 $(git log -1 --pretty=format:"%h")) >> $GITHUB_ENV
+        run: echo 'RELEASE_NOTES='$(git log -1 --pretty=%B) >> $GITHUB_ENV
       - name: publish apk to app center
         uses: wzieba/AppCenter-Github-Action@v1
         with:

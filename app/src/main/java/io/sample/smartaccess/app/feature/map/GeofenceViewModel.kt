@@ -69,9 +69,7 @@ internal class GeofenceViewModel(
 
     fun onAddClick() = intent {
         reduce {
-            state.copy(
-                bottomBarState = State.BottomBarState.AddPoint
-            )
+            state.copy(bottomBarState = State.BottomBarState.AddPoint)
         }
     }
 
