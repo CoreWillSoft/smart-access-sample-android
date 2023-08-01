@@ -15,5 +15,7 @@
     <string name="marker_text">Radius %1s(m)</string>
     <string name="notification_channel_geofence">SmartAccess Geofence Channel</string>
     <string name="notification_channel_geofence_description">SmartAccess Channel description</string>
+    <string name="smartaccess_splash_fuhr">FUHR</string>
+    <string name="smartaccess_splash_smartaccess">SmartAccess</string>
 
 </resources>
