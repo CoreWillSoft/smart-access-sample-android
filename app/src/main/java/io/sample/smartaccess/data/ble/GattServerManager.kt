@@ -1,10 +1,10 @@
 package io.sample.smartaccess.data.ble
 
 import android.bluetooth.BluetoothDevice
-import android.bluetooth.BluetoothGattCharacteristic.PROPERTY_NOTIFY
-import android.bluetooth.BluetoothGattCharacteristic.PROPERTY_WRITE_NO_RESPONSE
 import android.bluetooth.BluetoothGattCharacteristic.PERMISSION_READ
 import android.bluetooth.BluetoothGattCharacteristic.PERMISSION_WRITE
+import android.bluetooth.BluetoothGattCharacteristic.PROPERTY_NOTIFY
+import android.bluetooth.BluetoothGattCharacteristic.PROPERTY_WRITE_NO_RESPONSE
 import android.bluetooth.BluetoothGattService
 import android.content.Context
 import android.util.Log
@@ -13,18 +13,25 @@ import no.nordicsemi.android.ble.BleServerManager
 import no.nordicsemi.android.ble.observer.ServerObserver
 import java.util.UUID
 
-internal val SERVICE_UUID: UUID = UUID.fromString("3c25c1cf-b62c-4f3b-8205-c5e078b7d61d")
-internal val CHARACTERISTIC_UUID: UUID = UUID.fromString("3c254203-b62c-4f3b-8205-c5e078b7d61d")
+internal val SERVICE_UUID: UUID = UUID.fromString("49575abc-26e1-11ee-be56-0242ac120002")
+internal val RECEIVER_CHARACTERISTIC_UUID: UUID = UUID.fromString("49575d8c-26e1-11ee-be56-0242ac120002")
+internal val BROADCASTER_CHARACTERISTIC_UUID: UUID = UUID.fromString("49575f08-26e1-11ee-be56-0242ac120002")
 
 internal class GattServerManager(private val context: Context) : BleServerManager(context), ServerObserver {
 
-    private val gattCharacteristic = sharedCharacteristic(
-        CHARACTERISTIC_UUID,
-        PROPERTY_NOTIFY or PROPERTY_WRITE_NO_RESPONSE,
-        PERMISSION_READ or PERMISSION_WRITE,
+    private val receiverCharacteristic = sharedCharacteristic(
+        RECEIVER_CHARACTERISTIC_UUID,
+        PROPERTY_WRITE_NO_RESPONSE,
+        PERMISSION_WRITE,
     )
 
-    private val gattService = service(SERVICE_UUID, gattCharacteristic)
+    private val broadcasterCharacteristic = sharedCharacteristic(
+        BROADCASTER_CHARACTERISTIC_UUID,
+        PROPERTY_NOTIFY,
+        PERMISSION_READ,
+    )
+
+    private val gattService = service(SERVICE_UUID, receiverCharacteristic, broadcasterCharacteristic)
 
     private val serverConnections = mutableMapOf<String, Tunnel>()
 
@@ -35,7 +42,8 @@ internal class GattServerManager(private val context: Context) : BleServerManage
     }
 
     override fun onDeviceConnectedToServer(device: BluetoothDevice) {
-        serverConnections[device.address] = Tunnel.make(device, this, context, gattCharacteristic).apply(Tunnel::connect)
+        serverConnections[device.address] =
+            Tunnel.make(device, this, context, receiverCharacteristic, broadcasterCharacteristic).apply(Tunnel::connect)
     }
 
     override fun onDeviceDisconnectedFromServer(device: BluetoothDevice) {

@@ -32,14 +32,16 @@ internal interface Tunnel {
             device: BluetoothDevice,
             server: BleServerManager,
             context: Context,
-            characteristic: BluetoothGattCharacteristic
-        ): Tunnel = SimpleTunnel(device, characteristic, server, context)
+            receiverCharacteristic: BluetoothGattCharacteristic,
+            broadcasterCharacteristic: BluetoothGattCharacteristic,
+        ): Tunnel = SimpleTunnel(device, receiverCharacteristic, broadcasterCharacteristic, server, context)
     }
 }
 
 private class SimpleTunnel(
     private val device: BluetoothDevice,
-    private val characteristic: BluetoothGattCharacteristic,
+    private val receiverCharacteristic: BluetoothGattCharacteristic,
+    private val broadcasterCharacteristic: BluetoothGattCharacteristic,
     server: BleServerManager,
     context: Context
 ) : Tunnel, BleManager(context) {
@@ -51,7 +53,7 @@ private class SimpleTunnel(
             val callback = DataReceivedCallback { _, data ->
                 trySendBlocking(data)
             }
-            readCharacteristic(characteristic).with(callback).enqueue()
+            waitForWrite(receiverCharacteristic).with(callback).enqueue()
             awaitClose {}
         }
     }
@@ -83,6 +85,6 @@ private class SimpleTunnel(
 
     private suspend fun processCommunication(data: Data) {
         val communication = GlobalContext.get().get<BleCommunication>().invoke(data)
-        sendNotification(characteristic, communication()).suspend()
+        sendNotification(broadcasterCharacteristic, communication()).suspend()
     }
 }
