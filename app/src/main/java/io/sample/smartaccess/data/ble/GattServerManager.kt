@@ -33,7 +33,7 @@ internal class GattServerManager(private val context: Context) : BleServerManage
 
     private val gattService = service(SERVICE_UUID, receiverCharacteristic, broadcasterCharacteristic)
 
-    private val serverConnections = mutableMapOf<String, Tunnel>()
+    private var tunnel: Tunnel? = null
 
     override fun initializeServer(): List<BluetoothGattService> = listOf(gattService).also { setServerObserver(this) }
 
@@ -42,11 +42,12 @@ internal class GattServerManager(private val context: Context) : BleServerManage
     }
 
     override fun onDeviceConnectedToServer(device: BluetoothDevice) {
-        serverConnections[device.address] =
-            Tunnel.make(device, this, context, receiverCharacteristic, broadcasterCharacteristic).apply(Tunnel::connect)
+        if (tunnel != null) return
+        tunnel = Tunnel.make(device, this, context, receiverCharacteristic, broadcasterCharacteristic).apply(Tunnel::connect)
     }
 
     override fun onDeviceDisconnectedFromServer(device: BluetoothDevice) {
-        serverConnections.remove(device.address)?.closeConnection()
+        tunnel?.closeConnection()
+        tunnel = null
     }
 }

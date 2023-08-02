@@ -11,7 +11,10 @@ import io.sample.smartaccess.app.feature.splash.SplashScreen
 internal fun SmartAccessApp() {
     val navController = rememberNavController()
     NavHost(navController = navController, startDestination = "splash") {
-        composable(route = "splash") { SplashScreen { navController.navigate("map") } }
+        composable(route = "splash") { SplashScreen {
+            navController.popBackStack()
+            navController.navigate("map")
+        } }
         composable(route = "map") { MapScreen() }
     }
 }
