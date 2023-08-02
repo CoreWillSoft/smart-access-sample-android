@@ -33,16 +33,13 @@ import kotlinx.coroutines.withContext
 import org.koin.androidx.compose.koinViewModel
 import org.orbitmvi.orbit.compose.collectAsState
 
-private const val TAG = "GeofencingScreen"
-val defaultCameraPosition = CameraPosition.fromLatLngZoom(LatLng(0.0, 0.0), 11f)
+private val defaultCameraPosition = CameraPosition.fromLatLngZoom(LatLng(0.0, 0.0), 11f)
 
 @Composable
 internal fun GeofencingScreen() {
     val viewModel = koinViewModel<GeofenceViewModel>()
     val state by viewModel.collectAsState()
-    val cameraPositionState = rememberCameraPositionState {
-        position = defaultCameraPosition
-    }
+    val cameraPositionState = rememberCameraPositionState { position = defaultCameraPosition }
     GeofenceEffectCollector(viewModel)
     Box(
         Modifier.fillMaxSize()
@@ -63,8 +60,7 @@ internal fun GeofencingScreen() {
         )
         if (!state.mapLoaded && !state.currentLocationLoaded) {
             AnimatedVisibility(
-                modifier = Modifier
-                    .matchParentSize(),
+                modifier = Modifier.matchParentSize(),
                 visible = true,
                 enter = EnterTransition.None,
                 exit = fadeOut()
@@ -148,7 +144,6 @@ private fun GoogleMapView(
         uiSettings = uiSettings,
         onMapLoaded = onMapLoaded
     ) {
-        // Drawing on the map is accomplished with a child-based API
 
         MarkerInfoWindowContent(
             state = markerState,
@@ -233,6 +228,7 @@ private fun MapRegisterPointComponent(
             value = radius,
             onValueChange = onRadiusChange,
             modifier = Modifier.fillMaxWidth(),
+            singleLine = true,
             label = {
                 Text(text = stringResource(R.string.radius_in_meters_text))
             },
@@ -246,9 +242,7 @@ private fun MapRegisterPointComponent(
         )
         Button(
             onClick = onRegister,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 20.dp)
+            modifier = Modifier.fillMaxWidth().padding(horizontal = 20.dp)
         ) {
             Text(text = stringResource(R.string.save))
         }
