@@ -6,7 +6,10 @@ import android.bluetooth.BluetoothGattCharacteristic
 import android.content.Context
 import android.util.Log
 import io.sample.smartaccess.data.ble.communication.BleCommunication
-import kotlinx.coroutines.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.cancel
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.channels.trySendBlocking
 import kotlinx.coroutines.flow.callbackFlow
@@ -42,7 +45,7 @@ private class SimpleTunnel(
     private val device: BluetoothDevice,
     private val receiverCharacteristic: BluetoothGattCharacteristic,
     private val broadcasterCharacteristic: BluetoothGattCharacteristic,
-    server: BleServerManager,
+    private val server: BleServerManager,
     context: Context
 ) : Tunnel, BleManager(context) {
 
@@ -60,14 +63,12 @@ private class SimpleTunnel(
 
     init {
         useServer(server)
-        incomingFlow
-            .onEach(::processCommunication)
-            .catch { error -> log(Log.ERROR, error.message?: error.localizedMessage) }
-            .launchIn(scope = scope)
     }
 
     override fun connect() {
         connect(device).enqueue()
+        incomingFlow.onEach(::processCommunication)
+            .catch { error -> log(Log.ERROR, error.message ?: error.localizedMessage) }.launchIn(scope = scope)
     }
 
     override fun closeConnection() {

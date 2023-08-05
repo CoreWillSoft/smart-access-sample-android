@@ -7,10 +7,10 @@ import android.bluetooth.BluetoothGattCharacteristic.PROPERTY_NOTIFY
 import android.bluetooth.BluetoothGattCharacteristic.PROPERTY_WRITE_NO_RESPONSE
 import android.bluetooth.BluetoothGattService
 import android.content.Context
-import android.util.Log
 import io.sample.smartaccess.data.tunnel.Tunnel
 import no.nordicsemi.android.ble.BleServerManager
 import no.nordicsemi.android.ble.observer.ServerObserver
+import timber.log.Timber
 import java.util.UUID
 
 internal val SERVICE_UUID: UUID = UUID.fromString("49575abc-26e1-11ee-be56-0242ac120002")
@@ -38,12 +38,14 @@ internal class GattServerManager(private val context: Context) : BleServerManage
     override fun initializeServer(): List<BluetoothGattService> = listOf(gattService).also { setServerObserver(this) }
 
     override fun onServerReady() {
-        log(Log.INFO, "Gatt server ready")
+        Timber.v("Gatt server ready")
     }
 
     override fun onDeviceConnectedToServer(device: BluetoothDevice) {
+        Timber.v("Device connected to server: $device")
         if (tunnel != null) return
-        tunnel = Tunnel.make(device, this, context, receiverCharacteristic, broadcasterCharacteristic).apply(Tunnel::connect)
+        tunnel =
+            Tunnel.make(device, this, context, receiverCharacteristic, broadcasterCharacteristic).apply(Tunnel::connect)
     }
 
     override fun onDeviceDisconnectedFromServer(device: BluetoothDevice) {
